@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111811">
+  <title>GigDraft AI — Product Listing Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-mark">✳</span>
+        <span>gig<span class="brand-light">draft</span>
+          <small>AI STUDIO</small>
+        </span>
+      </a>
+
+      <p class="sidebar-label">WORKSPACE</p>
+      <button class="nav-item active">✳ &nbsp; Listing writer <span>AI</span></button>
+      <button class="nav-item" id="howItWorks">◷ &nbsp; How it works</button>
+
+      <div class="sidebar-bottom">
+        <div class="privacy-card">
+          <div class="privacy-icon">⌁</div>
+          <strong>Your ideas stay yours.</strong>
+          <p>Product details are processed by AI in your browser.</p>
+          <small>● LOCAL INFERENCE</small>
+        </div>
+        <div class="profile">
+          <div class="avatar">S</div>
+          <div>
+            <strong>Seller workspace</strong>
+            <small>Free · Local mode</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">Workspace <span>/</span> Listing writer</div>
+        <div class="model-status">
+          <span class="status-dot"></span>
+          <span id="modelStatus">AI model not loaded</span>
+          <button id="helpBtn" class="help-button" aria-label="Help">?</button>
+        </div>
+      </header>
+
+      <section class="intro">
+        <div class="eyebrow">✦ YOUR SMALL-BUSINESS SIDEKICK</div>
+        <h1>Good products deserve<br><em>great words.</em></h1>
+        <p>Turn rough product notes into a marketplace-ready listing in minutes.<br>
+          Made for independent sellers, makers, and side hustlers.</p>
+
+        <div class="trust-row">
+          <span>✦ No API key</span>
+          <span>◈ Open-weight model</span>
+          <span>⌁ Browser-based AI</span>
+        </div>
+      </section>
+
+      <div class="workspace-grid">
+        <section class="panel form-panel">
+          <div class="panel-heading">
+            <div class="step">01</div>
+            <h2>Tell us about your product</h2>
+          </div>
+
+          <form id="listingForm">
+            <label for="productName">Product name <b>*</b></label>
+            <input id="productName" maxlength="100" required
+              placeholder="e.g. Hand-poured cedar candle">
+
+            <div class="two-col">
+              <div>
+                <label for="category">Category</label>
+                <select id="category">
+                  <option>Home & living</option>
+                  <option>Fashion & accessories</option>
+                  <option>Art & collectibles</option>
+                  <option>Beauty & wellness</option>
+                  <option>Food & drink</option>
+                  <option>Digital product</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="platform">Selling platform</label>
+                <select id="platform">
+                  <option>Etsy</option>
+                  <option>eBay</option>
+                  <option>Shopify</option>
+                  <option>Instagram</option>
+                  <option>My own website</option>
+                </select>
+              </div>
+            </div>
+
+            <label for="features">Features and details <b>*</b></label>
+            <textarea id="features" rows="5" maxlength="1200" required
+              placeholder="Materials, size, colours, how it is made, what's included..."></textarea>
+
+            <div class="field-foot">
+              <span>Specific details improve your draft.</span>
+              <span id="charCount">0 / 1200</span>
+            </div>
+
+            <label>Writing style</label>
+            <div class="tone-options">
+              <button type="button" class="tone-option selected"
+                data-tone="Warm and thoughtful">☀ <span>Warm</span></button>
+              <button type="button" class="tone-option"
+                data-tone="Clean and minimal">◌ <span>Minimal</span></button>
+              <button type="button" class="tone-option"
+                data-tone="Playful and bold">✳ <span>Playful</span></button>
+              <button type="button" class="tone-option"
+                data-tone="Premium and refined">✧ <span>Premium</span></button>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="secondary-button" id="exampleBtn">
+                Try an example
+              </button>
+              <button type="submit" class="primary-button" id="generateBtn">
+                ✦ Generate listing <span>↗</span>
+              </button>
+            </div>
+            <p class="form-note">
+              The first run downloads the open model. Internet is required for
+              the initial model download.
+            </p>
+          </form>
+        </section>
+
+        <section class="panel output-panel">
+          <div class="panel-heading">
+            <div class="step">02</div>
+            <h2>Your listing draft</h2>
+            <span id="draftBadge" class="draft-badge">WAITING</span>
+          </div>
+
+          <div id="emptyState" class="empty-state">
+            <div class="illustration">
+              <div class="paper">
+                <span>✦</span>
+                <i></i><i></i><i class="short"></i>
+              </div>
+              <b>✧</b>
+            </div>
+            <h3>Your next best listing<br>starts here.</h3>
+            <p>Enter product details, choose a tone, and let your local AI
+              help you write your listing.</p>
+            <div class="empty-checks">
+              <span>✓ Product title</span>
+              <span>✓ Description</span>
+              <span>✓ Search tags</span>
+            </div>
+          </div>
+
+          <div id="loadingState" class="loading-state hidden">
+            <div class="loader"></div>
+            <h3 id="loadingTitle">Preparing your AI...</h3>
+            <p id="loadingText">The first model download may take a few minutes.</p>
+            <div class="progress-track">
+              <div id="progressBar"></div>
+            </div>
+          </div>
+
+          <div id="resultState" class="result-state hidden">
+            <div class="result-toolbar">
+              <span class="generated-label">● DRAFT GENERATED</span>
+              <button class="copy-button" id="copyAllBtn">▣ Copy all</button>
+            </div>
+
+            <div class="result-section">
+              <div class="result-label">
+                TITLE <button class="mini-copy" data-copy="resultTitle">Copy</button>
+              </div>
+              <p class="result-title" id="resultTitle"></p>
+            </div>
+
+            <div class="result-section">
+              <div class="result-label">
+                DESCRIPTION
+                <button class="mini-copy" data-copy="resultDescription">Copy</button>
+              </div>
+              <p class="result-description" id="resultDescription"></p>
+            </div>
+
+            <div class="result-section">
+              <div class="result-label">
+                SEARCH TAGS
+                <button class="mini-copy" data-copy="resultTags">Copy</button>
+              </div>
+              <div class="tag-list" id="resultTags"></div>
+            </div>
+
+            <div class="result-tip">
+              <span>✦</span>
+              <p><strong>Before you publish</strong><br>
+                Verify all details. AI may make mistakes or omit important facts.</p>
+            </div>
+            <button class="secondary-button regenerate-button" id="regenerateBtn">
+              ↻ Generate another draft
+            </button>
+          </div>
+
+          <div id="errorState" class="error-state hidden">
+            <h3>We couldn't load the model.</h3>
+            <p id="errorMessage">Check your internet connection and retry.</p>
+            <button class="secondary-button" id="retryBtn">Try again</button>
+          </div>
+        </section>
+      </div>
+
+      <footer>
+        <span>GIGDRAFT AI · BUILT FOR THE ONE-PERSON BUSINESS</span>
+        <span>Open model · Browser inference</span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="infoDialog">
+    <button class="dialog-close" id="closeDialog" aria-label="Close">×</button>
+    <div class="eyebrow">ABOUT THE TECHNOLOGY</div>
+    <h2>Open AI. Your workflow.</h2>
+    <p>
+      GigDraft uses Flan-T5-small through Transformers.js. After its files
+      are downloaded, text generation runs in your browser without a paid
+      hosted text-generation API.
+    </p>
+    <p>
+      First use requires internet. Cached files may help with later use, but
+      this version does not guarantee fully offline operation. The model is
+      compact, so always review its output.
+    </p>
+    <button class="primary-button" id="closeDialogBottom">Got it</button>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
